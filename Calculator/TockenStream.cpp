@@ -7,6 +7,7 @@ TockenStream::TockenStream()
 }
 
 Tocken TockenStream::get()
+// read characters from std::cin and compose a Tocken
 {
 	if (full)
 	{
@@ -18,9 +19,14 @@ Tocken TockenStream::get()
 	std::cin >> ch;
 
 	switch (ch) {
-	case ';':
-	case 'q':
-	case '(': case ')': case '+': case '-': case '*': case '/':
+	case print_tocken:
+	case quit_tocken:
+	case '(': 
+	case ')': 
+	case '+': 
+	case '-': 
+	case '*': 
+	case '/':
 		Tocken t;
 		t.kind = ch;
 		return t;
@@ -31,7 +37,7 @@ Tocken TockenStream::get()
 		std::cin.putback(ch);
 		double val;
 		std::cin >> val;
-		return Tocken{ val, '8' };
+		return Tocken{ val, number_tocken };
 	}
 	default:
 		throw std::runtime_error("Bad tocken");

@@ -8,20 +8,15 @@ TockenStream ts;
 double expression();
 double term();
 double primary();
+void calculate();
+
+const std::string prompt = "> ";
+const std::string result = "= ";
 
 int main(void) {
 	try {
-		while (std::cin)
-		{
-			std::cout << "> ";
-			Tocken t = ts.get();
-			while (t.kind == ';') t = ts.get();
-			if (t.kind == 'q') {
-				return 0;
-			}
-			ts.putback(t);
-			std::cout << "= " << expression() << std::endl;
-		}
+		calculate();
+		return 0;
 	}
 	catch (std::exception& e) {
 		std::cerr << e.what() << std::endl;
@@ -31,6 +26,19 @@ int main(void) {
 		std::cerr << "exception" << std::endl;
 		return 2;
 	}
+}
+
+void calculate()
+{
+		while (std::cin)
+		{
+			std::cout << prompt;
+			Tocken t = ts.get();
+			while (t.kind == print_tocken) t = ts.get();
+			if (t.kind == quit_tocken) return;
+			ts.putback(t);
+			std::cout << result << expression() << std::endl;
+		}
 }
 
 Tocken get_tocken()
@@ -105,7 +113,7 @@ double primary()
 		if (t.kind != ')') throw std::runtime_error("')' expected");
 		return d;
 	}
-	case '8':
+	case number_tocken:
 		return t.value;
 	case '-':
 		return - primary();
